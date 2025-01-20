@@ -33,6 +33,22 @@ jobs:
       build-commit: "main"
       artifacts-name: "wheels-latest"
 
+  combine:
+    needs: [macos, linux, macos-latest, linux-latest]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: my-artifact
+          pattern: wheels-*
+          merge-multiple: true
+      - name: Upload Combined Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: my-artifact
+          name: wheels-combined
+
   release:
     name: Create Release
     runs-on: ubuntu-latest
